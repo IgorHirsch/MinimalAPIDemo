@@ -1,12 +1,15 @@
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Swagger hinzufügen mit Dokumentation
+// Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -17,8 +20,7 @@ app.UseHttpsRedirection();
 
 var summaries = new[]
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-    "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
 app.MapGet("/weatherforecast", () =>
@@ -26,7 +28,7 @@ app.MapGet("/weatherforecast", () =>
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+            DateTime.Now.AddDays(index),
             Random.Shared.Next(-20, 55),
             summaries[Random.Shared.Next(summaries.Length)]
         ))
@@ -37,7 +39,7 @@ app.MapGet("/weatherforecast", () =>
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
